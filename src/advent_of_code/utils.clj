@@ -61,3 +61,11 @@
   (with-open [rdr (io/reader data-file)]
     (reduce conj [] (line-seq rdr))))
 
+
+(defn read-file-to-coordinates
+  [file-name]
+  (for [line (read-file-line-by-line file-name)]
+    (let [[x y] (str/split line #",")]
+      {:x (parse-int x) :y (parse-int y)})
+    )
+  )
