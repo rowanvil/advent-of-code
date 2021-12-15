@@ -36,7 +36,7 @@
         y-max (apply max (for [point list-of-points] (:y point)))]
     (for [y (range (+ 1 y-max))]
       (str/join " " (for [x (range (+ 1 x-max))]
-                        (if (utils/in? list-of-points {:x x :y y}) "0" "."))))))
+                        (if (utils/in? list-of-points {:x x :y y}) "0" " "))))))
 
 (defn day-13-part-two
   [dots-file folds-file]

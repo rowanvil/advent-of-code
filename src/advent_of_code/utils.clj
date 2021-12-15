@@ -27,6 +27,12 @@
   (remove #(in? entries-to-remove %) coll)
   )
 
+(defn assoc-or-inc
+  [m k n]
+  (if (in? (keys m) k)
+    (update m k #(+ n %))
+    (assoc m k n)))
+
 (defn list-of-digits-to-int
   [digits]
   (Integer. (re-find  #"\d+" (apply str digits) ))
