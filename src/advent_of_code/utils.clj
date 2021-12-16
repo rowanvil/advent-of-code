@@ -3,6 +3,12 @@
              [clojure.string :as str])
   )
 
+(defn seq-add
+  [seq-1 seq-2]
+  (for [n (range (count seq-1))]
+    (+ (nth seq-1 n) (nth seq-2 n)))
+  )
+
 (defn inclusive-range
   [max]
   (range (+ 1 max )))
@@ -75,3 +81,30 @@
       {:x (parse-int x) :y (parse-int y)})
     )
   )
+
+(defn update-costs
+  [graph costs unvisited curr]
+  (let [curr-cost (get costs curr)]
+    (reduce-kv
+      (fn [c nbr nbr-cost]
+        (if (unvisited nbr)
+          (update-in c [nbr] min (+ curr-cost nbr-cost))
+          c))
+      costs
+      (get graph curr))))
+
+(defn dijkstra
+  ([graph start]
+   (dijkstra graph start nil))
+  ([graph start end]
+   (loop [costs (assoc (zipmap (keys graph) (repeat Double/POSITIVE_INFINITY)) start 0)
+          curr start
+          unvisited (disj (apply hash-set (keys graph)) start)]
+     (cond
+       (= curr end) (select-keys costs [end])
+       (or (empty? unvisited) (= Double/POSITIVE_INFINITY (get costs curr))) costs
+
+       :else (let [next-costs (update-costs graph costs unvisited curr)
+                   next-node (apply min-key next-costs unvisited)]
+               (do (println (count unvisited))
+                (recur next-costs next-node (disj unvisited next-node))))))))
