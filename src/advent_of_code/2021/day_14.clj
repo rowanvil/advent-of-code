@@ -3,13 +3,11 @@
             [clojure.string :as str]))
 
 (defn parse-rules [file-name]
-  (apply hash-map
-         (apply concat
-                (for [line (utils/read-file-line-by-line file-name)]
-                  (let [[pattern insert] (str/split line #" -> ")]
-                    (list pattern
-                          (list (str (first pattern) insert)
-                                (str insert (second pattern)))))))))
+  (into {} (for [line (utils/read-file-line-by-line file-name)]
+             (let [[pattern insert] (str/split line #" -> ")]
+               [pattern
+                [(str (first pattern) insert)
+                 (str insert (second pattern))]]))))
 
 (defn parse-template [file-name]
   (let [template (slurp file-name)]
@@ -29,15 +27,11 @@
         (if (utils/in? (keys rules) pattern)
           (reduce (fn [m k] (utils/assoc-or-inc m k count))
                   growing-map
-                  (get rules pattern)
-                  ))))
+                  (get rules pattern)))))
     {}
-    template-map
-    )
-  )
+    template-map))
 
-(defn pairs-to-chars
-  [char-totals pair-entry]
+(defn pairs-to-chars [char-totals pair-entry]
   (reduce (fn [m k] (utils/assoc-or-inc m k (val pair-entry)))
           char-totals
           (seq (key pair-entry))))
@@ -51,20 +45,14 @@
     (let [char-count-with-ends-fixed (reduce-kv fix-ends {} char-counts)]
       (reduce-kv #(utils/assoc-or-inc %1 %2 (/ %3 2)) {} char-count-with-ends-fixed))))
 
-(defn get-max-min
-  [counts]
-  (- (apply max counts) (apply min counts))
-  )
+(defn get-max-min [counts]
+  (- (apply max counts) (apply min counts)))
 
-(defn apply-transformation-n-times
-  [template rules steps]
-  (last (take (+ 1 steps) (iterate #(apply-transformation-to-map % rules) template)))
-  )
+(defn apply-transformation-n-times [template rules steps]
+  (last (take (+ 1 steps) (iterate #(apply-transformation-to-map % rules) template))))
 
 (defn day-14 [template-file rules-file steps]
   (let [template (parse-template template-file)
         rules (parse-rules rules-file)]
-    (get-max-min (vals (pairs-map-to-char-totals (apply-transformation-n-times template rules steps))))
-    )
-  )
+    (get-max-min (vals (pairs-map-to-char-totals (apply-transformation-n-times template rules steps))))))
 

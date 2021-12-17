@@ -1,20 +1,14 @@
 (ns advent-of-code.utils
   (:require  [clojure.java.io :as io]
-             [clojure.string :as str])
-  )
+             [clojure.string :as str]))
 
-(defn seq-add
-  [seq-1 seq-2]
-  (for [n (range (count seq-1))]
-    (+ (nth seq-1 n) (nth seq-2 n)))
-  )
+(defn seq-add [seq-1 seq-2]
+  (for [n (range (count seq-1))] (+ (nth seq-1 n) (nth seq-2 n))))
 
-(defn inclusive-range
-  [max]
-  (range (+ 1 max )))
+(defn inclusive-range [max]
+  (range (+ 1 max)))
 
-(defn abs-dif
-  [x y]
+(defn abs-dif [x y]
   (Math/abs (- x y)))
 
 (defn in?
@@ -22,27 +16,20 @@
   [coll elm]
   (some #(= elm %) coll))
 
-(defn subset?
-  [coll-one coll-two]
-  (every? identity (for [elm coll-two] (in? coll-one elm)))
-  )
+(defn subset? [coll-one coll-two]
+  (every? identity (for [elm coll-two] (in? coll-one elm))))
 
 (defn remove-entries
   "true if coll contains elm"
   [coll entries-to-remove]
-  (remove #(in? entries-to-remove %) coll)
-  )
+  (remove #(in? entries-to-remove %) coll))
 
-(defn assoc-or-inc
-  [m k n]
-  (if (in? (keys m) k)
-    (update m k #(+ n %))
-    (assoc m k n)))
+(defn assoc-or-inc [m k n]
+  (if (in? (keys m) k) (update m k #(+ n %)) (assoc m k n)))
 
 (defn list-of-digits-to-int
   [digits]
-  (Integer. (re-find  #"\d+" (apply str digits) ))
-  )
+  (Integer. (re-find  #"\d+" (apply str digits))))
 
 (defn parse-int [s] (Integer/parseInt s))
 
@@ -50,40 +37,33 @@
   [list-of-lists]
   (apply map list list-of-lists))
 
-(defn string-to-list-of-ints
-  [digit-string]
+(defn string-to-list-of-ints [digit-string]
+  (for [digit (str/split digit-string #"")]  (parse-int digit)))
 
-  (for [digit (str/split digit-string #"")]  (parse-int digit))
+(defn read-file-with-separator-to-strings [file-name divisor]
+  (str/split (slurp file-name) divisor))
 
-  )
+(defn read-file-with-separator-to-ints [file-name divisor]
+  (for [number (read-file-with-separator-to-strings file-name divisor)] (parse-int number)))
 
-(defn read-file-with-separator-to-strings
-  [file-name divisor]
-  (str/split (slurp file-name) divisor)
-  )
+(defn read-file-line-by-line [data-file]
+  (with-open [rdr (io/reader data-file)] (reduce conj [] (line-seq rdr))))
 
-(defn read-file-with-separator-to-ints
-  [file-name divisor]
-  (for [number (read-file-with-separator-to-strings file-name divisor)]
-    (parse-int number))
-  )
-
-(defn read-file-line-by-line
-  [data-file]
-  (with-open [rdr (io/reader data-file)]
-    (reduce conj [] (line-seq rdr))))
-
-
-(defn read-file-to-coordinates
-  [file-name]
+(defn read-file-to-coordinates [file-name]
   (for [line (read-file-line-by-line file-name)]
     (let [[x y] (str/split line #",")]
-      {:x (parse-int x) :y (parse-int y)})
-    )
-  )
+      {:x (parse-int x) :y (parse-int y)})))
 
-(defn update-costs
-  [graph costs unvisited curr]
+(defn list-to-numbered-hash-map [list-to-hash fn]
+  (apply sorted-map (flatten (for [n (range (count list-to-hash))] [n (fn (nth list-to-hash n))]))))
+
+(defn list-to-map-of-maps [grid]
+  (list-to-numbered-hash-map grid #(list-to-numbered-hash-map % identity)))
+
+(defn parse-grid-of-values [file-name]
+  (list-to-map-of-maps (for [line (read-file-line-by-line file-name)] (string-to-list-of-ints line))))
+
+(defn update-costs [graph costs unvisited curr]
   (let [curr-cost (get costs curr)]
     (reduce-kv
       (fn [c nbr nbr-cost]
@@ -106,5 +86,4 @@
 
        :else (let [next-costs (update-costs graph costs unvisited curr)
                    next-node (apply min-key next-costs unvisited)]
-               (do (println (count unvisited))
-                (recur next-costs next-node (disj unvisited next-node))))))))
+               (recur next-costs next-node (disj unvisited next-node)))))))

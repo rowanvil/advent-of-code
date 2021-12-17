@@ -3,12 +3,9 @@
             [clojure.string :as str]
             [clojure.set :as set]))
 
-(defn string-to-list-of-sorted-char-lists
-  [string-value]
+(defn string-to-list-of-sorted-char-lists [string-value]
   (for [entry (str/split (str/trim string-value) #" ")]
-    (sort (seq entry))
-    )
-  )
+    (sort (seq entry))))
 
 (defn sort-signals
   "Map the 10 unique signals to the digit they represent"
@@ -37,35 +34,24 @@
         7 (assoc known-values 8 signal)
         :else known-values))
     {}
-    (sort-by count unique-signals))
-  )
+    (sort-by count unique-signals)))
 
-(defn decode-value
-  [signal-map values]
+(defn decode-value [signal-map values]
   (let [decoder (set/map-invert signal-map)]
     (for [value values]
-      (get decoder value)))
-  )
+      (get decoder value))))
 
 (defn get-output
   [file-name]
   (for [line (utils/read-file-line-by-line file-name)]
     (let [[signals values] (str/split line #"\|")]
       (let [signal-map (sort-signals (string-to-list-of-sorted-char-lists signals))]
-        (decode-value signal-map (string-to-list-of-sorted-char-lists values))
-        )
-      )
-    )
-  )
+        (decode-value signal-map (string-to-list-of-sorted-char-lists values))))))
 
-(defn day-eight
-  [file-name]
+(defn day-eight [file-name]
   (let [counts (frequencies (flatten (get-output file-name)))]
-    (+ (get counts 1) (get counts 4) (get counts 7) (get counts 8)))
-  )
+    (+ (get counts 1) (get counts 4) (get counts 7) (get counts 8))))
 
-(defn day-eight-part-two
-  [file-name]
+(defn day-eight-part-two [file-name]
   (apply + (for [output (get-output file-name)]
-     (utils/list-of-digits-to-int output)))
-  )
+     (utils/list-of-digits-to-int output))))
