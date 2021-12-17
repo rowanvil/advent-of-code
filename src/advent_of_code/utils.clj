@@ -27,6 +27,12 @@
 (defn assoc-or-inc [m k n]
   (if (in? (keys m) k) (update m k #(+ n %)) (assoc m k n)))
 
+(defn two-to-the_power-of [power]
+  (reduce * (repeat power 2)))
+
+(defn binary-value [int-list]
+  (apply + (map-indexed #(* %2 (two-to-the_power-of %1)) (reverse int-list))))
+
 (defn list-of-digits-to-int
   [digits]
   (Integer. (re-find  #"\d+" (apply str digits))))

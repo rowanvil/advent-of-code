@@ -15,6 +15,7 @@
             [advent-of-code.2021.day-13 :as thirteen]
             [advent-of-code.2021.day-14 :as fourteen]
             [advent-of-code.2021.day-15 :as fifteen]
+            [advent-of-code.2021.day-16 :as sixteen]
             ))
 
 (defn test-file [n]
@@ -87,3 +88,17 @@
 (deftest day-fifteen
   (is (= 40 (val (last(fifteen/day-15 (test-file 15))))))
   (is (= 315 (val (fifteen/day-15-part-two (test-file 15))))))
+
+(deftest day-sixteen
+  (is (= 16 (sixteen/day-16 "resources/2021/day-16/test-1.txt")))
+  (is (= 12 (sixteen/day-16 "resources/2021/day-16/test-2.txt")))
+  (is (= 23 (sixteen/day-16 "resources/2021/day-16/test-3.txt")))
+  (is (= 31 (sixteen/day-16 "resources/2021/day-16/test-4.txt")))
+  (is (= 3 (sixteen/day-16-part-two "resources/2021/day-16/test-5.txt")))
+  (is (= 54 (sixteen/day-16-part-two "resources/2021/day-16/test-6.txt")))
+  (is (= 7 (sixteen/day-16-part-two "resources/2021/day-16/test-7.txt")))
+  (is (= 9 (sixteen/day-16-part-two "resources/2021/day-16/test-8.txt")))
+  (is (= 1 (sixteen/day-16-part-two "resources/2021/day-16/test-9.txt")))
+  (is (= 0 (sixteen/day-16-part-two "resources/2021/day-16/test-10.txt")))
+  (is (= 0 (sixteen/day-16-part-two "resources/2021/day-16/test-11.txt")))
+  (is (= 1 (sixteen/day-16-part-two "resources/2021/day-16/test-12.txt"))))

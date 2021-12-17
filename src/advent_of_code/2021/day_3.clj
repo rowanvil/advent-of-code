@@ -5,19 +5,13 @@
   (for [line (utils/read-file-line-by-line file-name)]
     (for [digit (seq line)] digit)))
 
-(defn two-to-the_power-of [power]
-  (reduce * (repeat power 2)))
-
-(defn binary-value [int-list]
-  (apply + (map-indexed #(* %2 (two-to-the_power-of %1)) (reverse int-list))))
-
 (defn gamma [int-list]
-  (binary-value
+  (utils/binary-value
     (for [x int-list]
       (cond (pos? x) 1 :else 0))))
 
 (defn epsilon [int-list]
-  (binary-value
+  (utils/binary-value
     (for [x int-list]
       (cond (pos? x) 0 :else 1))))
 
@@ -48,7 +42,7 @@
      (range (count (first readings))))))
 
 (defn char-list-to-value [char-list]
-  (binary-value (for [x char-list]
+  (utils/binary-value (for [x char-list]
      (if (= x \1) 1 0))))
 
 (defn day-three-part-two [file-name]

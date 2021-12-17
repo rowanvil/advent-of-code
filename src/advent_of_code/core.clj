@@ -15,6 +15,7 @@
     [advent-of-code.2021.day-13]
     [advent-of-code.2021.day-14]
     [advent-of-code.2021.day-15]
+    [advent-of-code.2021.day-16]
     [advent-of-code.utils]
     ))
 
