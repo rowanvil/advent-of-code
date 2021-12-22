@@ -16,8 +16,8 @@
     [advent-of-code.2021.day-14]
     [advent-of-code.2021.day-15]
     [advent-of-code.2021.day-16]
-    [advent-of-code.utils]
-    ))
+    [advent-of-code.2021.day-17]
+    [advent-of-code.utils]))
 
 (defn foo
   "I don't do a whole lot."

@@ -16,7 +16,7 @@
             [advent-of-code.2021.day-14 :as fourteen]
             [advent-of-code.2021.day-15 :as fifteen]
             [advent-of-code.2021.day-16 :as sixteen]
-            ))
+            [advent-of-code.2021.day-17 :as seventeen]))
 
 (defn test-file [n]
   (str "resources/2021/day-" n "/test.txt"))
@@ -102,3 +102,7 @@
   (is (= 0 (sixteen/day-16-part-two "resources/2021/day-16/test-10.txt")))
   (is (= 0 (sixteen/day-16-part-two "resources/2021/day-16/test-11.txt")))
   (is (= 1 (sixteen/day-16-part-two "resources/2021/day-16/test-12.txt"))))
+
+(deftest day-seventeen
+  (is (= 45 (seventeen/day-17 20 30 -10 -5)))
+  (is (= 112 (seventeen/day-17-part-two 20 30 -10 -5))))
